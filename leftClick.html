@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            height:100%
+        }
+        #main{
+            position: relative;
+        }
+        #rightClick{
+            width: 400px;
+            height: 40px;
+            border: 2px solid #999;
+            font-size: 20px;
+            text-align: center;
+            line-height: 40px;
+        }
+        #show{
+            width: 100px;
+            border: 2px solid #f2f2f2;
+            background-color: #a99d9d;
+            list-style: none;
+            text-align: center;
+            position: absolute;
+            display: none;
+        }
+        #show li{
+            height: 30px;
+            line-height: 2.5;
+        }
+        #show li:not(:first-child){
+            border-top: 1px solid #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <div id="rightClick">你快点来点我啊，右键右键！</div>
+    <ul id="show">
+        <li>li 1</li>
+        <li>li 2</li>
+        <li>li 3</li>
+    </ul>
+</div>
+
+
+    <script>
+        var rClick = document.getElementById('rightClick');
+        var show = document.getElementById('show');
+        var main = document.getElementById('main');
+        rClick.addEventListener('contextmenu',function(event) {
+            // 阻止事件冒泡到body，就可以“禁止”右键菜单的出现了。
+            event.preventDefault();
+            event.stopPropagation();
+            //鼠标当前位置
+            var mouseLocaX = event.clientX;
+            var mouseLocaY = event.clientY;
+            //浏览器宽度
+            var winWidth = document.body.clientWidth;
+            var winHeight = document.body.clientHeight;
+            showMenu(show, [mouseLocaX, mouseLocaY, winWidth, winHeight]);
+        },false);
+        //由于window绑定了click hidden，就不用单独的绑定
+       window.addEventListener('contextmenu',function(event){
+            hidden(show);
+       },false);
+       window.addEventListener('click',function(event){
+           hidden(show);
+       },false);
+       //控制显隐
+        var showMenu = function(obj) {
+            obj.style.display = 'block';
+            obj.style.left = arguments[1][0] + "px";
+            obj.style.top = arguments[1][1] + "px";
+            if(400 - arguments[1][0] < 100) {
+                obj.style.left = arguments[1][0] - 100  + "px";
+            }else {
+                obj.style.left = arguments[1][0] + "px";
+            }
+            if(arguments[1][3] - arguments[1][1] > 90) {
+                obj.style.top = arguments[1][1]  + "px";
+            }else {
+                obj.style.top = arguments[1][1] - 90 + "px";
+            }
+        }
+        var hidden = function(obj) {
+            obj.style.display = 'none';
+        }
+       
+    </script>
+</body>
+</html
